@@ -1,6 +1,9 @@
 package com.pt2.retro;
 
 import android.os.Bundle;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -19,11 +22,22 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
+    List<Pytanie>  pytania;
+    RadioGroup radioGroup;
 
+    TextView trescPytania;
+    RadioButton radioButton_a;
+    RadioButton radioButton_b;
+    RadioButton radioButton_c;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        trescPytania = findViewById(R.id.trescPytania);
+        radioGroup = findViewById(R.id.radioGroup);
+        radioButton_a = findViewById(R.id.radioButton1);
+        radioButton_b = findViewById(R.id.radioButton2);
+        radioButton_c = findViewById(R.id.radioButton3);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://my-json-server.typicode.com/StanislawMachnik/odczytywanie/")
@@ -42,15 +56,20 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, response.code(), Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        List<Pytanie> pytania = response.body();
+                        pytania = response.body();
                         Toast.makeText(MainActivity.this, pytania.get(0).getTrescPytania(), Toast.LENGTH_SHORT).show();
+                        wyswietlPytanie(0);
                     }
 
                     @Override
                     public void onFailure(Call<List<Pytanie>> call, Throwable t) {
                         Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show(); //brak netu
                     }
+                    public void wyswietlPytanie(int ktore){
+
+                    }
                 }
         );
+
     }
 }
