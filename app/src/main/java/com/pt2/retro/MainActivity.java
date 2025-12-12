@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     };
     Button buttonNext;
     int aktualnePytanie = 0;
+    int punkty = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
                             return;
                         }
                         pytania = response.body();
-                        Toast.makeText(MainActivity.this, pytania.get(0).getTrescPytania(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(MainActivity.this, pytania.get(0).getTrescPytania(), Toast.LENGTH_SHORT).show();
                         wyswietlPytanie(0);
                     }
 
@@ -79,23 +80,27 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
-
         buttonNext.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        if(sprawdzOdpowiedz(aktualnePytanie)){
+                            Toast.makeText(MainActivity.this, "dobrze", Toast.LENGTH_SHORT).show();
+                            punkty++;
+                        }
+                        else{
+                            Toast.makeText(MainActivity.this, "źle", Toast.LENGTH_SHORT).show();
+                        }
                         if(aktualnePytanie < pytania.size()-1){
-                            if(sprawdzOdpowiedz(aktualnePytanie)){
-                                Toast.makeText(MainActivity.this, "dobrze", Toast.LENGTH_SHORT).show();
-                            }
-                            else{
-                                Toast.makeText(MainActivity.this, "źle", Toast.LENGTH_SHORT).show();
-                            }
                             aktualnePytanie++;
                             wyswietlPytanie(aktualnePytanie);
                         }
                         else{
                          // TODO: sprawdzanie
+                            // podliczanie punktów i wysyłanie SMS
+                            radioGroup.setVisibility(View.INVISIBLE);
+                            trescPytania.setText("Ilość uzyskanych punktów: " + punkty);
+                            buttonNext.setVisibility(View.INVISIBLE);
                         }
                     }
                 }
@@ -118,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else{
             return false;
+
         }
     }
 }
