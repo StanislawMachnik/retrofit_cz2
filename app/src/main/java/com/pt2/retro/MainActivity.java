@@ -1,5 +1,6 @@
 package com.pt2.retro;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
             R.id.radioButton3
     };
     Button buttonNext;
+    Button buttonShare;
     int aktualnePytanie = 0;
     int punkty = 0;
     @Override
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         radioButton_b = findViewById(R.id.radioButton2);
         radioButton_c = findViewById(R.id.radioButton3);
         buttonNext = findViewById(R.id.button1);
+        buttonShare = findViewById(R.id.button2);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://my-json-server.typicode.com/StanislawMachnik/odczytywanie/")
@@ -101,11 +104,27 @@ public class MainActivity extends AppCompatActivity {
                             radioGroup.setVisibility(View.INVISIBLE);
                             trescPytania.setText("Ilość uzyskanych punktów: " + punkty);
                             buttonNext.setVisibility(View.INVISIBLE);
+                            buttonShare.setVisibility(View.VISIBLE);
+
                         }
                     }
                 }
         );
+        buttonShare.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intentSend = new Intent();
+                        intentSend.setAction(Intent.ACTION_SEND);
+                        intentSend.putExtra(Intent.EXTRA_TEXT, "Otrzymano " + punkty + " punkty");
+                        intentSend.setType("text/plain");
+                        Intent intentShared = Intent.createChooser(intentSend, null);
+                        startActivity(intentShared);
+                    }
+                }
+        );
     }
+
     public void wyswietlPytanie(int ktore){
         Pytanie pytanie = pytania.get(ktore);
         trescPytania.setText(pytanie.getTrescPytania());
